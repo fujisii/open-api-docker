@@ -17,11 +17,21 @@ services:
     environment:
       SWAGGER_JSON: /openapi.yaml
 
-  swagger-api:
+  prism:
     image: stoplight/prism:3
-    container_name: "swagger-api"
+    container_name: "prism"
     ports:
       - "8003:4010"
     command: mock -h 0.0.0.0 /openapi.yaml
     volumes:
       - ./api/openapi.yaml:/openapi.yaml
+
+  redoc:
+    image: 'redocly/redoc'
+    container_name: "redoc"
+    ports:
+      - '8004:80'
+    volumes:
+      - './api/openapi.yaml:/usr/share/nginx/html/openapi.yaml'
+    environment:
+      - 'SPEC_URL=openapi.yaml'
